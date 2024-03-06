@@ -121,7 +121,7 @@ export default function Home() {
 
     return () => window.removeEventListener("keydown", handleKeyDown);
     // revealRowIndex isn't used here, but it needed in a hooks' dependencies to trigger a rerender
-    // of the component and then onKeyboardKeyPress, which depend on that value has the latest
+    // of the component and then onKeyboardKeyPress, which depends on that value has the latest
     // not sure why, but a useCallback with the onKeyboardKeyPress function depending on revealRowIndex didn't work
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [revealRowIndex]);
@@ -129,7 +129,7 @@ export default function Home() {
   return (
     <>
       <main className="flex min-h-screen flex-col items-center justify-start">
-        <div className="flex flex-col px-12 md:px-24 pt-6 md:pt-12 pb-4">
+        <div className="flex flex-col pt-6 pb-4">
           {/* <div className="text-8xl pb-3">Wordlez</div> */}
 
           {appLoaded && (
