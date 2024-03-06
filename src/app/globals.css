@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "react-simple-keyboard/build/css/index.css";
+
+:root {
+  --tile-bg-rgb: 255, 255, 255;
+  --tile-border-rgb: 211, 214, 218;
+  --tile-text-rgb: 0, 0, 0;
+
+  --tile-filled-border-rgb: 135, 138, 140;
+
+  --tile-used-border-rgba: 255, 255, 255, 0;
+  --tile-used-text-rgb: 255, 255, 255;
+
+  --in-word-rgb: 181, 159, 59;
+  --match-rgb: 83, 141, 78;
+  --no-match-rgb: 120, 124, 126;
+
+  --key-bg-rgb: 211, 214, 218;
+  --key-text-rgb: 0, 0, 0;
+  --key-text-used-rgb: 255, 255, 255;
+
+  --toast-bg-rgb: 0, 0, 0;
+  --toast-text-rgb: 255, 255, 255;
+
+  --body-bg-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tile-bg-rgb: 18, 18, 19;
+    --tile-border-rgb: 58, 58, 60;
+    --tile-text-rgb: 255, 255, 255;
+
+    --tile-filled-border-rgb: 86, 87, 88;
+
+    --tile-used-border-rgba: 255, 255, 255, 0;
+    --tile-used-text-rgb: 255, 255, 255;
+
+    --no-match-rgb: 58, 58, 60;
+
+    --key-bg-rgb: 129, 131, 132;
+    --key-text-rgb: 255, 255, 255;
+    --key-text-used-rgb: 255, 255, 255;
+
+    --toast-bg-rgb: 255, 255, 255;
+    --toast-text-rgb: 0, 0, 0;
+
+    --body-bg-rgb: 18, 18, 19;
+  }
+}
+
+body {
+  background-color: rgb(var(--body-bg-rgb));
+}
+
+.keyboard-theme {
+  background-color: transparent;
+  @apply pb-12 px-8;
+}
+
+.keyboard-theme .hg-rows {
+  @apply flex flex-col justify-center items-center;
+}
+
+.keyboard-theme .hg-row {
+  @apply mb-2 !important;
+}
+
+.keyboard-theme .hg-button {
+  border-bottom: 0;
+  @apply bg-key-bg text-key-text font-bold text-xl;
+}
+
+.keyboard-theme .hg-standardBtn {
+  width: 43px !important;
+  height: 58px !important;
+}
+
+.keyboard-theme .hg-standardBtn.\!bg-in-word,
+.keyboard-theme .hg-standardBtn.\!bg-match,
+.keyboard-theme .hg-standardBtn.\!bg-no-match {
+  color: rgb(var(--key-text-used-rgb)) !important;
+}
+
+.keyboard-theme .hg-button-enter {
+  width: 65px !important;
+  height: 58px !important;
+  font-size: 14px;
+}
+
+.keyboard-theme .hg-button-bksp {
+  width: 65px !important;
+  height: 58px !important;
+}
+
+.toaster {
+  background: rgb(var(--toast-bg-rgb)) !important;
+  color: rgb(var(--toast-text-rgb)) !important;
+}
+
+.animation-delay-0 {
+  transition-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+  transition-delay: 600ms;
+}
+
+.animation-delay-800 {
+  animation-delay: 800ms;
+  transition-delay: 1000ms;
+}
+
+.animation-delay-1200 {
+  animation-delay: 1200ms;
+  transition-delay: 1400ms;
+}
+
+.animation-delay-1600 {
+  animation-delay: 1600ms;
+  transition-delay: 1800ms;
+}
