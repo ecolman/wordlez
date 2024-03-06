@@ -189,7 +189,7 @@ const store = create<GameState>()(
                   get().resetGame();
                 }}
               >
-                Click here to try again
+                Click here to play again
               </div>,
               {
                 duration: Infinity,
