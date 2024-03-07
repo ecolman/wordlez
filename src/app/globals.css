@@ -80,7 +80,7 @@ body {
   color: rgb(var(--key-text-used-rgb)) !important;
 }
 
-// media queries for keyboard key sizes
+/* media queries for keyboard key sizes */
 @media only screen and (max-width: 499px) {
   .keyboard-theme .hg-standardBtn {
     width: 30px !important;
