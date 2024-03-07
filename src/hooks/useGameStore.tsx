@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-// @ts-ignore
-import { generate, wordList } from "random-words";
 
 import { vanillaStore as vanillaAppStore } from "@/hooks/useAppStore";
+import {
+  vanillaStore as vanillaWordStore,
+  Difficulty,
+} from "@/hooks/useWordStore";
 
 export enum MatchType {
   NotFound,
@@ -37,30 +39,26 @@ interface GameState {
   resetOnLoad: boolean;
 }
 
-const seed = new Date().toString();
-
 const store = create<GameState>()(
   persist(
     (set, get) => ({
       word: null,
       generateWord: () => {
-        const tileCount = get().tileCount;
-        const possibleWords = generate({
-          minLength: tileCount,
-          maxLength: tileCount,
-          seed,
-          exactly: 20,
-          formatter: (word) => word.toUpperCase(),
-        });
-        const randomIndex = Math.floor(Math.random() * 19);
+        const tileCount: number = get().tileCount;
+        const wordStore = vanillaWordStore.getState();
+        const word: string = wordStore.generateWord(
+          tileCount,
+          Difficulty.medium
+        );
 
-        set({ word: possibleWords[randomIndex] });
+        set({ word: word.toUpperCase() });
       },
       setWord: (word: string) => set({ word }),
 
       guess: "",
       addToGuess: (letter: string) => {
         const guess = get()?.guess;
+
         if (
           get()?.pastGuesses.length < get()?.maxGuesses &&
           guess.length < get().tileCount
@@ -69,8 +67,8 @@ const store = create<GameState>()(
         }
       },
       deleteFromGuess: () => {
-        const guess = get()?.guess;
-        const hasMatched = get()?.hasMatched;
+        const guess: string = get()?.guess;
+        const hasMatched: boolean = get()?.hasMatched;
 
         if (!hasMatched && guess.length > 0) {
           set({ guess: guess.slice(0, -1) });
@@ -80,11 +78,12 @@ const store = create<GameState>()(
         const appStore = vanillaAppStore.getState();
         const currentTryCount = get()?.tryCount;
         const guess = get().guess;
+        const wordStore = vanillaWordStore.getState();
 
         if (guess.length < get().tileCount) {
           appStore.showToastMessage("Not enough letters");
           appStore.setShakeRowIndex(currentTryCount);
-        } else if (wordList.indexOf(guess.toLowerCase()) > -1) {
+        } else if (wordStore.checkWordExists(guess)) {
           get().testMatch(guess);
         } else {
           appStore.showToastMessage("Not in word list");
@@ -195,6 +194,9 @@ const store = create<GameState>()(
                 duration: Infinity,
               }
             );
+            appStore.showToastMessage(`The word was: ${get().word}`, {
+              duration: Infinity,
+            });
             set({ resetOnLoad: true });
           }
 

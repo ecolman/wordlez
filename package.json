@@ -12,11 +12,11 @@
     "clsx": "^2.1.0",
     "lodash-es": "^4.17.21",
     "next": "14.1.0",
-    "random-words": "^2.0.1",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-simple-keyboard": "^3.7.86",
+    "wordlist-english": "^1.2.1",
     "zustand": "^4.5.1"
   },
   "devDependencies": {
