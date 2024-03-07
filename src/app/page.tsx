@@ -152,6 +152,18 @@ export default function Home() {
           }}
           buttonTheme={buttonHighlights}
         />
+
+        {appLoaded && (
+          <div className="text-black dark:text-white pb-4 text-sm">
+            Made with <span className="text-red-600">&#9829;</span> by{" "}
+            <a
+              className="underline hover:text-gray-200"
+              href="mailto:ecolman@gmail.com"
+            >
+              Eric Colman
+            </a>
+          </div>
+        )}
       </main>
 
       <Toaster
