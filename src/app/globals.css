@@ -74,26 +74,47 @@ body {
   @apply bg-key-bg text-key-text font-bold text-xl;
 }
 
-.keyboard-theme .hg-standardBtn {
-  width: 43px !important;
-  height: 58px !important;
-}
-
 .keyboard-theme .hg-standardBtn.\!bg-in-word,
 .keyboard-theme .hg-standardBtn.\!bg-match,
 .keyboard-theme .hg-standardBtn.\!bg-no-match {
   color: rgb(var(--key-text-used-rgb)) !important;
 }
 
-.keyboard-theme .hg-button-enter {
-  width: 65px !important;
-  height: 58px !important;
-  font-size: 14px;
+// media queries for keyboard key sizes
+@media only screen and (max-width: 499px) {
+  .keyboard-theme .hg-standardBtn {
+    width: 30px !important;
+    height: 58px !important;
+  }
+
+  .keyboard-theme .hg-button-enter {
+    width: 55px !important;
+    height: 58px !important;
+    font-size: 14px !important;
+  }
+
+  .keyboard-theme .hg-button-bksp {
+    width: 45px !important;
+    height: 58px !important;
+  }
 }
 
-.keyboard-theme .hg-button-bksp {
-  width: 65px !important;
-  height: 58px !important;
+@media only screen and (min-width: 500px) {
+  .keyboard-theme .hg-standardBtn {
+    width: 43px !important;
+    height: 58px !important;
+  }
+
+  .keyboard-theme .hg-button-enter {
+    width: 65px !important;
+    height: 58px !important;
+    font-size: 14px !important;
+  }
+
+  .keyboard-theme .hg-button-bksp {
+    width: 65px !important;
+    height: 58px !important;
+  }
 }
 
 .toaster {
