@@ -266,7 +266,6 @@ const store = create<GameState>()(
       tryCount: 1,
 
       resetGame: () => {
-        console.log("herererere");
         get()?.generateWord();
         set({
           guess: "",

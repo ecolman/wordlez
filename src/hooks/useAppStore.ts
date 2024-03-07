@@ -36,7 +36,6 @@ const useAppStore = createStore<AppState>()((set, get) => ({
 
   revealRowIndex: -1,
   setRevealRowIndex: (revealRowIndex: number) => {
-    console.log("updating reveal", revealRowIndex);
     set({ revealRowIndex });
 
     // reset reveal after time
