@@ -14,7 +14,7 @@ export default function TileRow({ index: rowIndex }: TileRowProps) {
   const { guess, hasMatched, pastGuesses, tileCount, tryCount, word } =
     useGameStore();
 
-  const [tileVals, setTileVals] = useState<string[]>([]);
+  const [tileValues, setTileValues] = useState<string[]>([]);
 
   const checkLetter = (index: number, letter: string | null): MatchType => {
     if (word && letter) {
@@ -28,13 +28,8 @@ export default function TileRow({ index: rowIndex }: TileRowProps) {
     return MatchType.NotFound;
   };
 
-  const setTileValues = (string: string | null) => {
-    const splitVal = string?.split("") || [];
-    setTileVals(splitVal);
-  };
-
   const getTileClasses = (index: number) => {
-    const tileValue = tileVals?.[index] ?? null;
+    const tileValue = tileValues?.[index] ?? null;
     const matchType = checkLetter(index, tileValue);
 
     return {
@@ -62,19 +57,27 @@ export default function TileRow({ index: rowIndex }: TileRowProps) {
   // updates values of tiles if active row
   useEffect(() => {
     if (isActive && guess.length >= 0) {
-      setTileVals([]);
-      setTileValues(guess);
+      const setTileVals = async () => {
+        await setTileValues([]);
+        await setTileValues(guess.split(""));
+      };
+
+      setTileVals();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isActive, tryCount, guess, rowIndex, setTileVals]);
+  }, [isActive, tryCount, guess, rowIndex, setTileValues]);
 
   // clear or set tile values from past guess if row is used
   useEffect(() => {
-    if (pastGuesses.length === 0) {
-      setTileValues(null);
-    } else if (rowIndex <= pastGuesses.length) {
-      setTileValues(pastGuesses[rowIndex - 1]);
-    }
+    const setTileVals = async () => {
+      if (pastGuesses.length === 0) {
+        await setTileValues([]);
+      } else if (rowIndex <= pastGuesses.length) {
+        await setTileValues(pastGuesses[rowIndex - 1].split("") ?? null);
+      }
+    };
+
+    setTileVals();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pastGuesses, rowIndex, tryCount]);
 
@@ -87,7 +90,7 @@ export default function TileRow({ index: rowIndex }: TileRowProps) {
     >
       {Array.from({ length: tileCount }, (item, index) => (
         <Tile
-          value={tileVals?.[index] ?? null}
+          value={tileValues?.[index] ?? null}
           className={clsx(getTileClasses(index))}
           key={`row-${rowIndex}-tile-${index}`}
         />
