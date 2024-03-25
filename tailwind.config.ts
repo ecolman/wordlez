@@ -15,6 +15,8 @@ const config: Config = {
         pop: "pop 100ms ease-in 1",
       },
       colors: {
+        "body-bg": "rgb(var(--body-bg-rgb))",
+
         "tile-bg": "rgb(var(--tile-bg-rgb))",
         "tile-border": "rgb(var(--tile-border-rgb))",
         "tile-text": "rgb(var(--tile-text-rgb))",

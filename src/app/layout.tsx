@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Wordlez",
-  description: "Wordle game written in React",
+  description: "Wordle game written in React, Tailwind CSS, and zustand",
 };
 
 export default function RootLayout({
