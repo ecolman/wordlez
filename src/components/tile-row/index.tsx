@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import Tile from "@/components/tile";
 import useAppStore from "@/hooks/useAppStore";
-import useGameStore, { MatchType } from "@/hooks/useGameStore";
+import useGameStore, { LetterMatchType } from "@/hooks/useGameStore";
 
 interface TileRowProps {
   index: number;
@@ -11,32 +11,20 @@ interface TileRowProps {
 
 export default function TileRow({ index: rowIndex }: TileRowProps) {
   const { revealRowIndex, shakeRowIndex } = useAppStore();
-  const { guess, hasMatched, pastGuesses, tileCount, tryCount, word } =
+  const { checkLetter, guess, hasMatched, pastGuesses, tileCount, tryCount } =
     useGameStore();
 
   const [tileValues, setTileValues] = useState<string[]>([]);
 
-  const checkLetter = (index: number, letter: string | null): MatchType => {
-    if (word && letter) {
-      if (index <= word.length && word[index] === letter) {
-        return MatchType.Match;
-      } else if (word.indexOf(letter) > -1) {
-        return MatchType.InWord;
-      }
-    }
-
-    return MatchType.NotFound;
-  };
-
   const getTileClasses = (index: number) => {
     const tileValue = tileValues?.[index] ?? null;
-    const matchType = checkLetter(index, tileValue);
+    const matchType = checkLetter(index, tileValue, tileValues.join(""));
 
     return {
       "animate-pop border-tile-filled-border": isActive && tileValue,
-      "bg-in-word": isUsed && matchType === MatchType.InWord,
-      "bg-match": isUsed && matchType === MatchType.Match,
-      "bg-no-match": isUsed && matchType === MatchType.NotFound,
+      "bg-in-word": isUsed && matchType === LetterMatchType.InWord,
+      "bg-match": isUsed && matchType === LetterMatchType.Match,
+      "bg-no-match": isUsed && matchType === LetterMatchType.NotFound,
       "border-tile-used-border text-tile-used-text": isUsed,
       [`animate-forward-flip animation-delay-${index * 400}`]: revealRow,
     };
@@ -65,7 +53,7 @@ export default function TileRow({ index: rowIndex }: TileRowProps) {
       setTileVals();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isActive, tryCount, guess, rowIndex, setTileValues]);
+  }, [isActive, guess, setTileValues]);
 
   // clear or set tile values from past guess if row is used
   useEffect(() => {

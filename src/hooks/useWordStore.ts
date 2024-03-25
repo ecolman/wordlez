@@ -19,9 +19,9 @@ export enum Difficulty {
 }
 
 const difficulties = {
-  [Difficulty.easy]: [...english10, ...english20, ...english35],
-  [Difficulty.medium]: [...english35, ...english40, ...english50],
-  [Difficulty.hard]: [...english40, ...english50, ...english55],
+  [Difficulty.easy]: [...english10, ...english20],
+  [Difficulty.medium]: [...english20, ...english35],
+  [Difficulty.hard]: [...english35, ...english40],
 };
 
 const allWords = [
@@ -37,17 +37,17 @@ const allWords = [
 
 interface WordState {
   checkWordExists: (word: string) => boolean;
-  generateWord: (wordLength: number, difficulty: Difficulty) => string;
+  generateWord: (wordLength: number, difficulty?: Difficulty) => string;
 }
 
-const useAppStore = createStore<WordState>()((set, get) => ({
+const useWordStore = createStore<WordState>()((set, get) => ({
   checkWordExists: (word: string) => {
     return allWords.indexOf(word.toLowerCase()) > -1;
   },
 
   generateWord: (
     wordLength: number,
-    difficulty: Difficulty = Difficulty.medium
+    difficulty: Difficulty = Difficulty.easy
   ) => {
     const words = difficulties[difficulty];
     const lengthedWords = filter(words, (w) => w.length === wordLength);
@@ -57,7 +57,7 @@ const useAppStore = createStore<WordState>()((set, get) => ({
   },
 }));
 
-export const vanillaStore = useAppStore;
+export const vanillaStore = useWordStore;
 
 const store = (selector: any = undefined) =>
   // eslint-disable-next-line react-hooks/rules-of-hooks

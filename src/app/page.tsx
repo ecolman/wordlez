@@ -1,81 +1,31 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import Keyboard, {
-  KeyboardButtonTheme,
-  KeyboardLayoutObject,
-} from "react-simple-keyboard";
+import { useEffect } from "react";
+import Keyboard from "react-simple-keyboard";
 import { Toaster } from "react-hot-toast";
 
+import TileRow from "@/components/tile-row";
+import Header from "@/components/header";
 import useAppStore from "@/hooks/useAppStore";
 import useGameStore from "@/hooks/useGameStore";
-import TileRow from "@/components/tile-row";
+import useKeyboardStore from "@/hooks/useKeyboardStore";
 
 export default function Home() {
-  const [keyboardLayout, setKeyboardLayout] = useState({
-    default: [
-      "Q W E R T Y U I O P",
-      "A S D F G H J K L",
-      "{enter} Z X C V B N M {bksp}",
-    ],
-  } as KeyboardLayoutObject);
-  const { appLoaded, revealRowIndex, setAppLoaded } = useAppStore();
+  const { appLoaded, onscreenKeyboardOnly, revealRowIndex, setAppLoaded } =
+    useAppStore();
+  const { maxGuesses, letters, word, generateWord, resetGame, resetOnLoad } =
+    useGameStore();
   const {
-    addToGuess,
-    deleteFromGuess,
-    checkGuess,
-    maxGuesses,
-    letters,
-    word,
-    generateWord,
-    resetGame,
-    resetOnLoad,
-  } = useGameStore();
-
-  const onKeyboardKeyPress = (button: string) => {
-    // only allow keyboard input if not in process of revealing a row
-    if (revealRowIndex === -1) {
-      switch (button) {
-        case "{bksp}":
-          deleteFromGuess();
-          break;
-
-        case "{enter}":
-          checkGuess();
-          break;
-
-        default:
-          addToGuess(button);
-      }
-    }
-  };
+    keyboardLayout,
+    highlightedButtons,
+    onKeyboardKeyPress,
+    setHighlightedButtons,
+  } = useKeyboardStore();
 
   // highlight buttons on keyboard
-  const buttonHighlights = useMemo(() => {
-    const buttonHighlights: KeyboardButtonTheme[] = [];
-
-    if (letters.inWord.length > 0) {
-      buttonHighlights.push({
-        class: "!bg-in-word",
-        buttons: letters.inWord.join(" "),
-      } as KeyboardButtonTheme);
-    }
-
-    if (letters.matched.length > 0) {
-      buttonHighlights.push({
-        class: "!bg-match",
-        buttons: letters.matched.join(" "),
-      } as KeyboardButtonTheme);
-    }
-
-    if (letters.notMatched.length > 0) {
-      buttonHighlights.push({
-        class: "!bg-no-match",
-        buttons: letters.notMatched.join(" "),
-      } as KeyboardButtonTheme);
-    }
-
-    return buttonHighlights;
+  useEffect(() => {
+    setHighlightedButtons(letters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [letters]);
 
   // generate new word if app is loaded and none exists
@@ -99,39 +49,38 @@ export default function Home() {
     function handleKeyDown(event: any) {
       const keyCode = event?.keyCode;
 
-      switch (keyCode) {
-        case 8:
-          onKeyboardKeyPress("{bksp}");
-          break;
+      if (!onscreenKeyboardOnly) {
+        switch (keyCode) {
+          case 8:
+            onKeyboardKeyPress("{bksp}");
+            break;
 
-        case 13:
-          onKeyboardKeyPress("{enter}");
-          break;
+          case 13:
+            onKeyboardKeyPress("{enter}");
+            break;
 
-        default:
-          if (keyCode >= 65 && keyCode <= 90) {
-            onKeyboardKeyPress(event.key.toUpperCase());
-          }
+          default:
+            if (keyCode >= 65 && keyCode <= 90) {
+              onKeyboardKeyPress(event.key.toUpperCase());
+            }
 
-          break;
+            break;
+        }
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-    // revealRowIndex isn't used here, but it needed in a hooks' dependencies to trigger a rerender
-    // of the component and then onKeyboardKeyPress, which depends on that value has the latest
-    // not sure why, but a useCallback with the onKeyboardKeyPress function depending on revealRowIndex didn't work
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [revealRowIndex]);
+  }, [onscreenKeyboardOnly]);
 
   return (
     <>
       <main className="flex min-h-screen flex-col items-center justify-start">
-        <div className="flex flex-col pt-6 pb-4">
-          {/* <div className="text-8xl pb-3">Wordlez</div> */}
+        <Header />
 
+        <div className="flex flex-col pt-6 pb-4">
           {appLoaded && (
             <div className={`grid grid-rows-${maxGuesses} gap-1.5`}>
               {Array.from({ length: maxGuesses }, (item, index) => (
@@ -150,19 +99,22 @@ export default function Home() {
             "{bksp}": "⌫",
             "{enter}": "ENTER",
           }}
-          buttonTheme={buttonHighlights}
+          buttonTheme={highlightedButtons}
         />
 
         {appLoaded && (
-          <div className="text-black dark:text-white pb-4 text-sm">
-            Made with <span className="text-red-600">&#9829;</span> by{" "}
-            <a
-              className="underline hover:text-gray-200"
-              href="mailto:ecolman@gmail.com"
-            >
-              Eric Colman
-            </a>
-          </div>
+          <>
+            <div className="text-black dark:text-white pb-1 text-sm flex justify-between">
+              Made&nbsp;with&nbsp;<div className="text-red-600">&#9829;</div>
+              &nbsp;by&nbsp;
+              <a
+                className="underline hover:text-gray-400 dark:hover:text-gray-200"
+                href="mailto:ecolman@gmail.com"
+              >
+                Eric Colman
+              </a>
+            </div>
+          </>
         )}
       </main>
 
