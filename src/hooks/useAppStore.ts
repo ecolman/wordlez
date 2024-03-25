@@ -16,6 +16,21 @@ interface AppState {
 
   showToastMessage: (message: string | JSX.Element, options?: any) => void;
   clearToastMessages: () => void;
+
+  showInfoModal: boolean;
+  setShowInfoModal: (showModal: boolean) => void;
+
+  showSettingsModal: boolean;
+  setShowSettingsModal: (showModal: boolean) => void;
+
+  darkTheme: boolean;
+  setDarkTheme: (darkTheme: boolean) => void;
+
+  highContractMode: boolean;
+  setHighContractMode: (highContractMode: boolean) => void;
+
+  onscreenKeyboardOnly: boolean;
+  setOnscreenKeyboardOnly: (onscreenKeyboardOnly: boolean) => void;
 }
 
 const useAppStore = createStore<AppState>()((set, get) => ({
@@ -50,6 +65,23 @@ const useAppStore = createStore<AppState>()((set, get) => ({
   clearToastMessages: () => {
     toast.dismiss();
   },
+
+  showInfoModal: false,
+  setShowInfoModal: (showModal: boolean) => set({ showInfoModal: showModal }),
+
+  showSettingsModal: false,
+  setShowSettingsModal: (showModal: boolean) =>
+    set({ showSettingsModal: showModal }),
+
+  darkTheme: false,
+  setDarkTheme: (darkTheme: boolean) => set({ darkTheme }),
+
+  highContractMode: false,
+  setHighContractMode: (highContractMode: boolean) => set({ highContractMode }),
+
+  onscreenKeyboardOnly: false,
+  setOnscreenKeyboardOnly: (onscreenKeyboardOnly: boolean) =>
+    set({ onscreenKeyboardOnly }),
 }));
 
 export const vanillaStore = useAppStore;
